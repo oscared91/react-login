@@ -17,60 +17,56 @@ import {
 
 function App () {
   
-  const [justifyActivite, setJustifyActive] = useState('tab1')
+  const [justifyActive, setJustifyActive] = useState('tab1')
   
   const handleJustifyClick = (value) => {
-    if (value == justifyActivite) {
+    if (value === justifyActive) {
       return
-    }
+    }   
 
     setJustifyActive(value)
   }
 
   return (
     <MDBContainer fluid className="p-3 my-5 d-flex flex-column w-50">
+          <div className="d-flex aling-items-center justify-content-center ps-5 pt-5 pb-5">
+            <img src="gato.png" className="img-fluid" style={{width:90, height:90}} />
+            <span className="h3 fw-bold mb-2"> GD: Gato_Dev </span>
+          </div>
       <MDBRow>
-        <MDBCol xl='6' col="10" className=" d-flex">
-      //selec login register panel
-      <MDBTabs pills justify className="mb-3 d-flex flex-row justify-content-between">
-        <MDBTabsItem>
-          <MDBTabsLink onClick={() => handleJustifyClick('Tab1')} active={justifyActive === 'tab1'}>
-            Login
-          </MDBTabsLink>
-        </MDBTabsItem>
+        <MDBCol xl='6' col="10" className=" ">
+      
+        <MDBTabs pills justify className="mb-3 d-flex flex-row justify-content-between">
+          <MDBTabsItem>
+            <MDBTabsLink onClick={() => handleJustifyClick('tab1')} active={justifyActive === 'tab1'}>
+              Login
+            </MDBTabsLink>
+          </MDBTabsItem>
         <MDBTabsItem>
           <MDBTabsLink onClick={()=> handleJustifyClick('tab2')} active={justifyActive === 'tab2'}>
             Register
           </MDBTabsLink>
         </MDBTabsItem>
       </MDBTabs>
-    <MDBTabsContent>
-      <MDBTabsPane Swon={setJustifyActive === 'tab1'}>
-
-      </MDBTabsPane>
+      <MDBTabsContent>
       
-    </MDBTabsContent>
-
-    <MDBTabsPane show={justifyActive=== 'tab1'}>
-          //icono
-          <div className="d-flex flex-row ps-5 pt-5">
-            <img src="gato.png" className="img-fluid" style={{width:120, height:120}} />
-            <span className="h2 fw-bold mb-2"> GD: Gato_Dev </span>
-          </div>
-      // sing in google
+      <MDBTabsPane open = {justifyActive === 'tab1'}>
+          
+          
+{/* sing in google*/}
       <div className="text-center mb-3">
         <p>Sign in with:</p>
         
-        <MDBBtn tag ='a' color='none' className="m-1 " size="lg" style={{color: '#1266g1'}}>
+        <MDBBtn tag ='a' color='none' className="m-1 " size="lg" style={{color: '#1266f1'}}>
             <MDBIcon fab icon="google" className="sm" />
             
         </MDBBtn>
-      // or division
+{/* or division*/}
       </div>
       <div className="divider col-10 align-items-center my-4">
         <p className="text-center fw-bold mx-3 mb-0">OR</p>
       </div>
-      // data login 
+{/*data login*/} 
       <div className="d-flex col-10 flex-column justify-content-center h-custom-2 w-75 pt-4">
         <h3 className="fw-normal mb-3 ps-5 pb-3" style={{letterSpacing: '1px'}}>Log in</h3>
         <MDBInput 
@@ -90,30 +86,24 @@ function App () {
             <a href=''>Forgot password</a> 
         </div>
         <MDBBtn className="col-10 justify-content-center mb-0 px-4" size='lg'>Login</MDBBtn>
-        <p className="small fw bold mt-2 pt-1 mb-2">Don't have an account? <a href='' className="link-danger">Register</a></p>
+        <p className="small fw-bold mt-2 pt-1 mb-2">Don't have an account? <a href='' className="link-danger">Register</a></p>
       </div>
   
     </MDBTabsPane>
-    <MDBTabsPane show={justifyActive === 'tab2'}>
-          //icono
-          <div className="d-flex flex-row ps-5 pt-5">
-            <img src="gato.png" className="img-fluid" style={{width:120, height:120}} />
-            <span className="h2 fw-bold mb-2"> GD: Gato_Dev </span>
-          </div>
-      // sing in google
+
+    
+    <MDBTabsPane open = {justifyActive === 'tab2'}>
       <div className="text-center mb-3">
         <p>Sign in with:</p>
         
-        <MDBBtn tag ='a' color='none' className="m-1 " size="lg" style={{color: '#1266g1'}}>
+        <MDBBtn tag ='a' color='none' className="m-1 " size="lg" style={{color: '#1266f1'}}>
             <MDBIcon fab icon="google" className="sm" />
             
         </MDBBtn>
-      // or division
       </div>
       <div className="divider col-10 align-items-center my-4">
         <p className="text-center fw-bold mx-3 mb-0">OR</p>
       </div>
-      // data register 
       <div className="d-flex col-10 flex-column justify-content-center h-custom-2 w-75 pt-4">
         <h3 className="fw-normal mb-3 ps-5 pb-3" style={{letterSpacing: '1px'}}>Log in</h3>
         <MDBInput 
@@ -125,19 +115,19 @@ function App () {
         <MDBInput 
             wrapperClass = 'mb-4' 
             label='Username' 
-            id='formControlLg-password' 
+            id='form2' 
             type='text' 
             size='lg'/>
         <MDBInput 
             wrapperClass = 'mb-4' 
             label='email' 
-            id='formControLg-password' 
+            id='form3' 
             type='email' 
             size='lg'/>
         <MDBInput 
             wrapperClass = 'mb-4' 
             label='Password' 
-            id='formControlLg-password' 
+            id='form4' 
             type='password' 
             size='lg'/>
           <div className="d-flex justify-content-center mb-4">
@@ -149,9 +139,10 @@ function App () {
 
       </MDBTabsPane>
 
+    </MDBTabsContent>
     </MDBCol>
         
-    <MDBCol xl="6" className='d-None d-sm-block px-0'>
+    <MDBCol xl="6" className='d-none d-sm-block px-0'>
       <img  src ="tuli.jpg" 
         className="w-100" 
         alt="Login image"
