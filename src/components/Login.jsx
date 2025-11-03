@@ -1,4 +1,7 @@
 import React from "react"
+import { signInWithEmailAndPassword} from 'firebase/auth'
+import { auth } from '../firebase'
+import { useState } from "react"
 import {
   MDBBtn,
   MDBIcon,
@@ -7,9 +10,28 @@ import {
   MDBInput,
   MDBCheckbox, 
 } from "mdb-react-ui-kit"
+export default function Login(){
+  
+  const [formValue, setFormValue] = useState({
+    email: '',
+    password: ''
+  })
+  const onChange = (e) => {
+    setFormValue({...formValue,[e.target.name]: e.target.value})
+  }
 
-export default function Login({formValue, onChange}){
+  const hadnleLogin = async (e) =>{
+    e.preventDefault()
+    try {
+      await signInWithEmailAndPassword(auth, formValue.email, formValue.password)
+      setMsg('Login successfull')
+      } catch (error){
+        setMsg(error.message)
+      }
+  }
+
   return(
+
     <>
       <div className="text-start mb-2">
         <p>Sign in with:</p>
@@ -22,7 +44,7 @@ export default function Login({formValue, onChange}){
       </div> 
         <div className=" flex-column justify-content-center h-custom-2 w-75 pt-2">
           <h3 className="fw-normal mb-2 ps-2 pb-3" style={{letterSpacing: '1px'}}>Log in</h3>
-        <MDBValidation>
+        <MDBValidation onSubmit={hadnleLogin}>
           <MDBValidationItem  feedback = "campo requerido" invalid>
 
             <MDBInput 
