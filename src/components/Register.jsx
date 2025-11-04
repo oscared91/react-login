@@ -53,9 +53,9 @@ export default function Register(){
         email : formValue.email,
         creadoEn: new Date()
       })
-      setMsg('Registro exitoso')
+      alert('Registro exitoso')
     } catch (error) {
-      setMsg(error.message)
+      alert(error.message)
     }
   }
 
