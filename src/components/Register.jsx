@@ -1,8 +1,9 @@
 
 import React from "react"
 import { useState } from "react"
-import {createUserWithEmailAndPassword} from 'firebase/auth'
-import { auth } from '../firebase'
+import {createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
+import { auth, db } from '../firebase'
+import {doc, setDoc} from "firebase/firestore"
 import {
   MDBBtn,
   MDBIcon,
@@ -16,9 +17,12 @@ import {
  
 export default function Register(){
   const [formValue, setFormValue] = useState({
-    email: '',
-    password: '',
-    passwordRe: '',
+    email: "",
+    nombre: "",
+    nacimiento: "",
+    identificacion: "",
+    password: "",
+    passwordRe: "",
   })
   const [msg, setMsg] = useState("")
   const onChange = (e) => {
@@ -26,8 +30,11 @@ export default function Register(){
   }
   const handleRegister = async (e) => {
     e.preventDefault()
-    if (!formValue.email || !formValue.password || !formValue.passwordRe){
-      return setMsg("Campo imcompleto")
+    if (!formValue.email || !formValue.nombre || !formValue.nacimiento || !formValue.identificacion || !formValue.password || !formValue.passwordRe){
+      return setMsg("Campos incompletos")
+    }
+    if (!/^\d+$/.test(formValue.identificacion)){
+      return setMsg('identificación: solo caracteres numericos')
     }
 
     if (formValue.password.length < 6) {
@@ -36,36 +43,62 @@ export default function Register(){
     if (formValue.password !== formValue.passwordRe){
       return setMsg('Passwords no coinciden')
     }
-
-    
-
     try {
       await createUserWithEmailAndPassword(auth, formValue.email, formValue.password)
+      const user = userCredential.user
+      await setDoc(doc(db, "usuarios", user.uid),{
+        nombre: formValue.nombre,
+        nacimiento: formValue.nacimiento,
+        identificacion : formValue.identificacion,
+        email : formValue.email,
+        creadoEn: new Date()
+      })
       setMsg('Registro exitoso')
     } catch (error) {
       setMsg(error.message)
     }
   }
 
-  return(
-<>
-  <div className="text-start mb-1">
-    <p>Sign in with:</p>
+  const handleGoogleRegister = async () => {
+    const provider = new GoogleAuthProvider()
+    try {
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user;
+      console.log("Usuario registrado:", user);
+      // Aquí puedes guardar datos extra en Firestore si lo deseas
+    } catch (error) {
+      console.error("Error al registrarse con Google:", error.message)
+    }
+  }
 
-    <MDBIcon fab icon="google" size='6x' />
+  return(
+<div className="scroll-container" style={{ maxHeight: "400px ", overflowY: "auto" }}>
+  <div className="d-flex align-items-center text-start" >
+    <p className="fw-bold mt-3 m-2">Sign in with:</p>
+
     <MDBBtn 
+      floating
       tag ='a' 
-      color='none' 
-      className="m-1 " 
+      color='secodary'
+      className="aling-items-center ms-3 mt-3 " 
+      onClick={handleGoogleRegister}
       size="lg" 
-      style={{color: '#1266f1'}}>
+      style={{boxShadow: '0 0 15px 2px rgba(75, 208, 208, 1)'}}
+    >
+      <img src='google.png' alt="Google icon" style={{height: '90%',width:'auto'}}/>
+
     </MDBBtn>
   </div>
   <div className="divider col-10 align-items-center my-1">
+    <hr className="hr hr-blurry"/>
     <p className="text-center fw-bold mx-3 mb-0">Or</p>
   </div>
   <div className="d-flex col-10 flex-column justify-content-center h-custom-2 w-75 pt-2">
-    <h3 className="fw-normal mb-3 ps-5 pb-3" style={{letterSpacing: '1px'}}>Log in</h3>
+    <h4 
+      className="fw-bold d-flex  justify-content-center fw-normal mb-3  pb-3" 
+      style={{letterSpacing: '1px'}}>
+        Sign in
+      </h4>
     <MDBValidation onSubmit={handleRegister} >
       {msg && (
         <div className='small text-danger text-center mb-3 fw-6'>{msg}</div>
@@ -83,22 +116,56 @@ export default function Register(){
           size='lg'/>
       </MDBValidationItem>
       <MDBValidationItem feedback = "campo requerido" invalid>
-        <label>
-
-        <MDBTooltip tag="span" title="Mínimo 6 caracteres">
-          <MDBIcon fas icon="question-circle" className="ms-2 text-info"/>
-        </MDBTooltip>
-        </label>
+        
         <MDBInput 
-        value={formValue.password}
-        name="password"
-        onChange={onChange}
-        required
-        wrapperClass = 'mb-4' 
-        label='Password' 
-        id='form2' 
-        type='password' 
-        size='lg'/>
+          value={formValue.nombre}
+          name="nombre"
+          onChange={onChange}
+          required
+          wrapperClass = 'mb-4' 
+          label='Nombre' 
+          id='form2' 
+          type='text' 
+          size='lg'/>
+      </MDBValidationItem>
+      <MDBValidationItem feedback = "campo requerido" invalid>
+        
+        <MDBInput 
+          value={formValue.nacimiento}
+          name="nacimiento"
+          onChange={onChange}
+          required
+          wrapperClass = 'mb-4' 
+          label='Fecha de nacimiento' 
+          id='form3' 
+          type='date' 
+          size='lg'/>
+      </MDBValidationItem>
+      <MDBValidationItem feedback = "campo requerido" invalid>
+        
+        <MDBInput 
+          value={formValue.identificacion}
+          name="identificacion"
+          onChange={onChange}
+          required
+          wrapperClass = 'mb-4' 
+          label='identificacion' 
+          id='form4' 
+          type='text' 
+          size='lg'/>
+      </MDBValidationItem>
+      <MDBValidationItem feedback = "campo requerido" invalid>
+        
+        <MDBInput 
+          value={formValue.password}
+          name="password"
+          onChange={onChange}
+          required
+          wrapperClass = 'mb-4' 
+          label='Password' 
+          id='form5' 
+          type='password' 
+          size='lg'/>
       </MDBValidationItem>
       <MDBValidationItem  feedback ="campo requerido" invalid>
         <MDBInput 
@@ -108,16 +175,34 @@ export default function Register(){
           required
           wrapperClass = 'mb-4' 
           label='Confirm password' 
-          id='form4' 
+          id='form6' 
           type='password' 
           size="lg"/>
       </MDBValidationItem>
         <div className="small d-flex justify-content-center fs-6 mt-3 mb-2">
-          <MDBCheckbox className=""name='FlexCheck' id= 'flexCheckDefault' label='he leido todos los terminos y condiciones' required/>
+          <MDBCheckbox 
+            className=""
+            name='FlexCheck' 
+            id= 'flexCheckDefault' 
+            label={
+              <h6>
+              He leído todos los {''}
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{color: '#007bff', textDecoration:'underline', pointerEvents:'none'}}
+                >
+                  términos y condiciones
+                </a>
+                </h6>
+             }
+            required
+            />
         </div>
       <MDBBtn type="submit" className="mb-4 w-100">Sing up</MDBBtn>  
     </MDBValidation>
   </div>
-</>
+</div>
   );
 }

@@ -22,16 +22,25 @@ function App () {
     setJustifyActive(value)
   }
   return (
-    <MDBContainer fluid className="p-3 my-5 d-flex flex-column w-50">
-          <div className="d-flex aling-items-center justify-content-center ps-5 pt-5 pb-5">
-            <img src="gato.png" className="img-fluid" style={{width:90, height:90}} />
-            <span className="h3 fw-bold mb-2"> GD: Gato_Dev </span>
+    <MDBContainer breakpoint="lg" fluid className=" d-flex flex-column w-50">
+          <div className="d-flex aling-items-center justify-content-center" >
+            <img src="gato.png" className="img-fluid" style={{width:150, height:'auto'}} />
+            <span 
+              className="d-flex align-items-center justify-content-center px-5 my-5 "  
+              style={{ 
+                backgroundColor:'#0b0d0bff', 
+                color: '#c6eef1ff',
+                fontFamily: 'Consolas, monospace',
+                fontSize: '16px',
+                boxShadow: '0 0 20px 3px rgba(116, 199, 227, 1)' }}>
+               !DD:\\ !Dog_Dev: _ </span>
           </div>
+          <hr className="hr hr-blurry"/>
       <MDBRow className="d-flex">
-        <MDBCol xl='6' col="10" className=" ">
+        <MDBCol xl='6' col="10" className="">
       
         <MDBTabs fill justify className="mb-3 d-flex flex-row justify-content-between">
-          <MDBTabsItem>
+          <MDBTabsItem className="">
             <MDBTabsLink onClick={() => handleJustifyClick('tab1')} active={justifyActive === 'tab1'}>
               Login
             </MDBTabsLink>
