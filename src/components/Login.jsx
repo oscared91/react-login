@@ -10,6 +10,8 @@ import {
   MDBInput,
   MDBCheckbox, 
 } from "mdb-react-ui-kit"
+import MyButton from "../common/components/MyButton"
+
 export default function Login(){
   
   const [formValue, setFormValue] = useState({
@@ -20,9 +22,12 @@ export default function Login(){
     setFormValue({...formValue,[e.target.name]: e.target.value})
   }
 
+  // Eventos: onClick, onChange, onMouse ... Siempre! onNombreDelEvento
+  // Manejadores de Eventos: handleClick, handleChange, handleLogin, handleRegister ...
   
   const hadnleLogin = async (e) => {
     e.preventDefault()
+    // Clausulas de guarda
     if (!formValue.email || !formValue.password){
       return setMsg("Campos incompletos")
     }
@@ -80,6 +85,8 @@ export default function Login(){
         Log in
     </h4> 
     <MDBValidation onSubmit={hadnleLogin}>
+
+      <MyButton />
           
           <MDBValidationItem  feedback = "campo requerido" invalid>
 

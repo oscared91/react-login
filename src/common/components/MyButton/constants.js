@@ -1,0 +1,1 @@
+export const myMsg = "El campo es invalido ojo!";
